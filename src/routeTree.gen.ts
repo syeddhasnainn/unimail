@@ -8,59 +8,172 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from "./routes/__root"
-import { Route as IndexRouteImport } from "./routes/index"
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as AppRouteImport } from './routes/_app'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as AppIndexRouteImport } from './routes/_app/index'
+import { Route as AppMailRouteImport } from './routes/_app/mail'
+import { Route as AppSettingsRouteImport } from './routes/_app/settings'
+import { Route as ApiAttachmentsMessageIdIndexRouteImport } from './routes/api/attachments/$messageId.$index'
 
-const IndexRoute = IndexRouteImport.update({
-  id: "/",
-  path: "/",
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMailRoute = AppMailRouteImport.update({
+  id: '/mail',
+  path: '/mail',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+const ApiAttachmentsMessageIdIndexRoute =
+  ApiAttachmentsMessageIdIndexRouteImport.update({
+    id: '/api/attachments/$messageId/$index',
+    path: '/api/attachments/$messageId/$index',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  "/": typeof IndexRoute
+  '/': typeof AppIndexRoute
+  '/login': typeof LoginRoute
+  '/mail': typeof AppMailRoute
+  '/settings': typeof AppSettingsRoute
+  '/api/attachments/$messageId/$index': typeof ApiAttachmentsMessageIdIndexRoute
 }
 export interface FileRoutesByTo {
-  "/": typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/mail': typeof AppMailRoute
+  '/settings': typeof AppSettingsRoute
+  '/': typeof AppIndexRoute
+  '/api/attachments/$messageId/$index': typeof ApiAttachmentsMessageIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  "/": typeof IndexRoute
+  '/_app': typeof AppRouteWithChildren
+  '/login': typeof LoginRoute
+  '/_app/mail': typeof AppMailRoute
+  '/_app/settings': typeof AppSettingsRoute
+  '/_app/': typeof AppIndexRoute
+  '/api/attachments/$messageId/$index': typeof ApiAttachmentsMessageIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: "/"
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/mail'
+    | '/settings'
+    | '/api/attachments/$messageId/$index'
   fileRoutesByTo: FileRoutesByTo
-  to: "/"
-  id: "__root__" | "/"
+  to:
+    | '/login'
+    | '/mail'
+    | '/settings'
+    | '/'
+    | '/api/attachments/$messageId/$index'
+  id:
+    | '__root__'
+    | '/_app'
+    | '/login'
+    | '/_app/mail'
+    | '/_app/settings'
+    | '/_app/'
+    | '/api/attachments/$messageId/$index'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  ApiAttachmentsMessageIdIndexRoute: typeof ApiAttachmentsMessageIdIndexRoute
 }
 
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    "/": {
-      id: "/"
-      path: "/"
-      fullPath: "/"
-      preLoaderRoute: typeof IndexRouteImport
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app/': {
+      id: '/_app/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/mail': {
+      id: '/_app/mail'
+      path: '/mail'
+      fullPath: '/mail'
+      preLoaderRoute: typeof AppMailRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/settings': {
+      id: '/_app/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/api/attachments/$messageId/$index': {
+      id: '/api/attachments/$messageId/$index'
+      path: '/api/attachments/$messageId/$index'
+      fullPath: '/api/attachments/$messageId/$index'
+      preLoaderRoute: typeof ApiAttachmentsMessageIdIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
 }
 
+interface AppRouteChildren {
+  AppMailRoute: typeof AppMailRoute
+  AppSettingsRoute: typeof AppSettingsRoute
+  AppIndexRoute: typeof AppIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppMailRoute: AppMailRoute,
+  AppSettingsRoute: AppSettingsRoute,
+  AppIndexRoute: AppIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
+  LoginRoute: LoginRoute,
+  ApiAttachmentsMessageIdIndexRoute: ApiAttachmentsMessageIdIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 
-import type { getRouter } from "./router.tsx"
-import type { createStart } from "@tanstack/react-start"
-declare module "@tanstack/react-start" {
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
   interface Register {
     ssr: true
     router: Awaited<ReturnType<typeof getRouter>>

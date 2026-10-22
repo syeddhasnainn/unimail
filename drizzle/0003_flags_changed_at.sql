@@ -1,0 +1,1 @@
+ALTER TABLE `messages` ADD `flags_changed_at` integer;

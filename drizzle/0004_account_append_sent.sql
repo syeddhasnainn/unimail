@@ -1,0 +1,1 @@
+ALTER TABLE `accounts` ADD `append_sent` integer DEFAULT true NOT NULL;
