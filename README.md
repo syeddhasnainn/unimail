@@ -14,7 +14,7 @@ Unimail is self-hosted and single-user. You run your own copy, it keeps a local 
 
 ## Requirements
 
-- [Node.js](https://nodejs.org) 22.9 or newer
+- [Node.js](https://nodejs.org) 22.23.4+, 24.22.1+ or 26.12.1+ (older releases miss the October 2026 security fixes)
 - [pnpm](https://pnpm.io/installation) (`corepack enable` sets it up)
 - A machine that stays on if you want mail to keep syncing (a small VPS or a home server works)
 
