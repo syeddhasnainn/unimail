@@ -2,6 +2,8 @@
 
 One web inbox for all your email accounts: Gmail, iCloud, Yahoo, Fastmail, Zoho, Titan, custom domains or any other IMAP/SMTP provider.
 
+![Unimail inbox with five accounts, AI categories and an open email](docs/screenshot.png)
+
 Unimail is self-hosted and single-user. You run your own copy, it keeps a local copy of your mail in SQLite, and you sign in with one password that you choose.
 
 - Unified inbox across accounts, plus per-account views, search, stars, archive, junk and trash
